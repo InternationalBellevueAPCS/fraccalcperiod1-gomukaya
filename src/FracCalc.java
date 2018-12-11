@@ -14,8 +14,8 @@ public class FracCalc {
 		String operation = "";
 		operation = console.nextLine();
 		while (!operation.equals("quit")) {
-			String secondOperand = produceAnswer(operation);
-			System.out.println(secondOperand);
+			double answer = produceAnswer(operation);
+			System.out.println("The answer is "+answer);
 			System.out.println("Please enter another operation.");
 			operation = console.nextLine();
 		}
@@ -34,15 +34,52 @@ public class FracCalc {
 	 * @return the result of the fraction after it has been calculated. Example:
 	 *         return ==> "1_1/4"
 	 */
-	public static String produceAnswer(String input) {
+	public static double produceAnswer(String input) {
 		int firstspace = input.indexOf(" ");
-		String firstOperand = input.substring(0, firstspace + 1);
-		String afterspace = input.substring(firstspace + 1);
+		String firstOperand = input.substring(0, firstspace);
+		int slash = firstOperand.indexOf("/");
+		int underscore=firstOperand.indexOf("_");
+		String whole = firstOperand.substring(0,underscore);
+		String numerator = firstOperand.substring(underscore+1,slash);
+		String denominator= firstOperand.substring(slash+1,firstOperand.length());
+		int x = Integer.parseInt(whole);
+		int y = Integer.parseInt(numerator);
+		int z = Integer.parseInt(denominator);
+		double firstdec = toDecimal(x,y,z);
+		String afterspace = input.substring(firstspace+1);
+		int secondspace = afterspace.indexOf(" ");
+		String operator = afterspace.substring(0, 1);
+		String secondOperand = afterspace.substring(secondspace+1);
+		slash=secondOperand.indexOf("/");
+		underscore=secondOperand.indexOf("_");
+		whole = secondOperand.substring(0,underscore);
+		numerator = secondOperand.substring(underscore+1,slash);
+		denominator= secondOperand.substring(slash+1,secondOperand.length());
+		x = Integer.parseInt(whole);
+		y = Integer.parseInt(numerator);
+		z = Integer.parseInt(denominator);
+		double seconddec=toDecimal(x,y,z);
+		double answer = 0;
+		if(operator.equals("+")) {
+			answer = add(firstdec,seconddec);
+		}
+		else if(operator.equals("-")) {
+			answer = sub(firstdec,seconddec);
+		}
+		else if(operator.equals("*")) {
+			answer = mul(firstdec,seconddec);
+		}
+		else if(operator.equals("/")) {
+			answer = div(firstdec,seconddec);
+		}
+		return answer;
+		
+		/*String afterspace = input.substring(firstspace + 1);
 		int secondspace = afterspace.indexOf(" ");
 		String operator = afterspace.substring(0, secondspace + 1);
 		String secondOperand = afterspace.substring(secondspace + 1);
-		int slash = secondOperand.indexOf("/");
-		int underscore = secondOperand.indexOf("_");
+		slash = secondOperand.indexOf("/");
+		underscore = secondOperand.indexOf("_");
 		int wholenum = 0;
 		int numeratornum = 0;
 		int denominatornum = 0;
@@ -66,7 +103,7 @@ public class FracCalc {
 		numeratornum = Integer.parseInt(numerator);
 		denominatornum = Integer.parseInt(denominator);
 		secondOperand=("whole:" + wholenum + " " + "numerator:" + numeratornum + " " + "denominator:" + denominatornum );
-		return secondOperand;
+		return secondOperand;*/
 		// TODO: Implement this function to produce the solution to the input
 		// Checkpoint 1: Return the second operand. Example "4/5 * 1_2/4" returns
 		// "1_2/4".
@@ -80,40 +117,26 @@ public class FracCalc {
 
 	}
 
-	// TODO: Fill in the space below with helper methods
-
-	/**
-	 * greatestCommonDivisor - Find the largest integer that evenly divides two
-	 * integers. Use this helper method in the Final Checkpoint to reduce fractions.
-	 * Note: There is a different (recursive) implementation in BJP Chapter 12.
-	 * 
-	 * @param a - First integer.
-	 * @param b - Second integer.
-	 * @return The GCD.
-	 */
-	public static int greatestCommonDivisor(int a, int b) {
-		a = Math.abs(a);
-		b = Math.abs(b);
-		int max = Math.max(a, b);
-		int min = Math.min(a, b);
-		while (min != 0) {
-			int tmp = min;
-			min = max % min;
-			max = tmp;
-		}
-		return max;
+	public static double toDecimal(int a, int b,int c) {
+		double x = a*c;
+		double y= x + b;
+		double z = y / c;
+		return z;
 	}
-
-	/**
-	 * leastCommonMultiple - Find the smallest integer that can be evenly divided by
-	 * two integers. Use this helper method in Checkpoint 3 to evaluate expressions.
-	 * 
-	 * @param a - First integer.
-	 * @param b - Second integer.
-	 * @return The LCM.
-	 */
-	public static int leastCommonMultiple(int a, int b) {
-		int gcd = greatestCommonDivisor(a, b);
-		return (a * b) / gcd;
+	public static double add(double a, double b) {
+		double x = a+b;
+		return x;
+	}
+	public static double sub(double a, double b) {
+		double x = a-b;
+		return x;
+	}
+	public static double mul(double a, double b) {
+		double x = a*b;
+		return x;
+	}
+	public static double div(double a, double b) {
+		double x = a/b;
+		return x;
 	}
 }
