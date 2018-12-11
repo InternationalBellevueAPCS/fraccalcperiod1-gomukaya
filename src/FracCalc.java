@@ -15,7 +15,8 @@ public class FracCalc {
 		operation = console.nextLine();
 		while (!operation.equals("quit")) {
 			double answer = produceAnswer(operation);
-			System.out.println("The answer is "+answer);
+			String fraction = fraction(answer);
+			System.out.println("The answer is " + fraction+".");
 			System.out.println("Please enter another operation.");
 			operation = console.nextLine();
 		}
@@ -38,55 +39,34 @@ public class FracCalc {
 		int firstspace = input.indexOf(" ");
 		String firstOperand = input.substring(0, firstspace);
 		int slash = firstOperand.indexOf("/");
-		int underscore=firstOperand.indexOf("_");
-		String whole = firstOperand.substring(0,underscore);
-		String numerator = firstOperand.substring(underscore+1,slash);
-		String denominator= firstOperand.substring(slash+1,firstOperand.length());
+		int underscore = firstOperand.indexOf("_");
+		String whole = "";
+		String numerator = "";
+		String denominator = "";
+		if (slash != -1 && underscore > 0) {
+			whole = firstOperand.substring(0, underscore);
+			numerator = firstOperand.substring(underscore + 1, slash);
+			denominator = firstOperand.substring(slash + 1, firstOperand.length());
+		} else if (slash == -1) {
+			whole = firstOperand;
+			numerator = ("0");
+			denominator = ("1");
+		} else if (underscore == -1) {
+			whole = ("0");
+			numerator = firstOperand.substring(underscore + 1, slash);
+			denominator = firstOperand.substring(slash + 1, firstOperand.length());
+		}
 		int x = Integer.parseInt(whole);
 		int y = Integer.parseInt(numerator);
 		int z = Integer.parseInt(denominator);
-		double firstdec = toDecimal(x,y,z);
-		String afterspace = input.substring(firstspace+1);
+		double firstdec = toDecimal(x, y, z);
+		String afterspace = input.substring(firstspace + 1);
 		int secondspace = afterspace.indexOf(" ");
 		String operator = afterspace.substring(0, 1);
-		String secondOperand = afterspace.substring(secondspace+1);
-		slash=secondOperand.indexOf("/");
-		underscore=secondOperand.indexOf("_");
-		whole = secondOperand.substring(0,underscore);
-		numerator = secondOperand.substring(underscore+1,slash);
-		denominator= secondOperand.substring(slash+1,secondOperand.length());
-		x = Integer.parseInt(whole);
-		y = Integer.parseInt(numerator);
-		z = Integer.parseInt(denominator);
-		double seconddec=toDecimal(x,y,z);
-		double answer = 0;
-		if(operator.equals("+")) {
-			answer = add(firstdec,seconddec);
-		}
-		else if(operator.equals("-")) {
-			answer = sub(firstdec,seconddec);
-		}
-		else if(operator.equals("*")) {
-			answer = mul(firstdec,seconddec);
-		}
-		else if(operator.equals("/")) {
-			answer = div(firstdec,seconddec);
-		}
-		return answer;
-		
-		/*String afterspace = input.substring(firstspace + 1);
-		int secondspace = afterspace.indexOf(" ");
-		String operator = afterspace.substring(0, secondspace + 1);
 		String secondOperand = afterspace.substring(secondspace + 1);
 		slash = secondOperand.indexOf("/");
 		underscore = secondOperand.indexOf("_");
-		int wholenum = 0;
-		int numeratornum = 0;
-		int denominatornum = 0;
-		String whole = ("");
-		String numerator = ("");
-		String denominator = ("");
-		if (slash != -1&&underscore>0) {
+		if (slash != -1 && underscore > 0) {
 			whole = secondOperand.substring(0, underscore);
 			numerator = secondOperand.substring(underscore + 1, slash);
 			denominator = secondOperand.substring(slash + 1, secondOperand.length());
@@ -99,11 +79,42 @@ public class FracCalc {
 			numerator = secondOperand.substring(underscore + 1, slash);
 			denominator = secondOperand.substring(slash + 1, secondOperand.length());
 		}
-		wholenum = Integer.parseInt(whole);
-		numeratornum = Integer.parseInt(numerator);
-		denominatornum = Integer.parseInt(denominator);
-		secondOperand=("whole:" + wholenum + " " + "numerator:" + numeratornum + " " + "denominator:" + denominatornum );
-		return secondOperand;*/
+		x = Integer.parseInt(whole);
+		y = Integer.parseInt(numerator);
+		z = Integer.parseInt(denominator);
+		double seconddec = toDecimal(x, y, z);
+		double answer = 0;
+		if (operator.equals("+")) {
+			answer = add(firstdec, seconddec);
+		} else if (operator.equals("-")) {
+			answer = sub(firstdec, seconddec);
+		} else if (operator.equals("*")) {
+			answer = mul(firstdec, seconddec);
+		} else if (operator.equals("/")) {
+			answer = div(firstdec, seconddec);
+		}
+		return answer;
+
+		/*
+		 * String afterspace = input.substring(firstspace + 1); int secondspace =
+		 * afterspace.indexOf(" "); String operator = afterspace.substring(0,
+		 * secondspace + 1); String secondOperand = afterspace.substring(secondspace +
+		 * 1); slash = secondOperand.indexOf("/"); underscore =
+		 * secondOperand.indexOf("_"); int wholenum = 0; int numeratornum = 0; int
+		 * denominatornum = 0; String whole = (""); String numerator = (""); String
+		 * denominator = (""); if (slash != -1&&underscore>0) { whole =
+		 * secondOperand.substring(0, underscore); numerator =
+		 * secondOperand.substring(underscore + 1, slash); denominator =
+		 * secondOperand.substring(slash + 1, secondOperand.length()); } else if (slash
+		 * == -1) { whole = secondOperand; numerator = ("0"); denominator = ("1"); }
+		 * else if (underscore == -1) { whole = ("0"); numerator =
+		 * secondOperand.substring(underscore + 1, slash); denominator =
+		 * secondOperand.substring(slash + 1, secondOperand.length()); } wholenum =
+		 * Integer.parseInt(whole); numeratornum = Integer.parseInt(numerator);
+		 * denominatornum = Integer.parseInt(denominator); secondOperand=("whole:" +
+		 * wholenum + " " + "numerator:" + numeratornum + " " + "denominator:" +
+		 * denominatornum ); return secondOperand;
+		 */
 		// TODO: Implement this function to produce the solution to the input
 		// Checkpoint 1: Return the second operand. Example "4/5 * 1_2/4" returns
 		// "1_2/4".
@@ -117,26 +128,55 @@ public class FracCalc {
 
 	}
 
-	public static double toDecimal(int a, int b,int c) {
-		double x = a*c;
-		double y= x + b;
+	public static String fraction(double x) {
+		String a = "" + x;
+		String spilts[] = a.split("\\."); // split using decimal
+		int b = spilts[1].length(); // find the decimal length
+		int denominator = (int) Math.pow(10, b); // calculate the denominator
+		int numerator = (int) (x * denominator); // calculate the numerator
+		int gcd = getGCD(numerator, denominator); // Find the greatest common divisor between them
+		String fraction = "";
+		if((denominator/gcd)==1) {
+			fraction = "" + numerator;
+			return fraction;
+		}
+		else {
+		fraction = "" + numerator / gcd + "/" + denominator / gcd;
+		return fraction;
+	}
+	}
+
+	public static int getGCD(int a, int b) {
+		if (b == 0) {
+			return a;
+		}
+		return getGCD(b, a % b);
+	}
+
+	public static double toDecimal(int a, int b, int c) {
+		double x = a * c;
+		double y = x + b;
 		double z = y / c;
 		return z;
 	}
+
 	public static double add(double a, double b) {
-		double x = a+b;
+		double x = a + b;
 		return x;
 	}
+
 	public static double sub(double a, double b) {
-		double x = a-b;
+		double x = a - b;
 		return x;
 	}
+
 	public static double mul(double a, double b) {
-		double x = a*b;
+		double x = a * b;
 		return x;
 	}
+
 	public static double div(double a, double b) {
-		double x = a/b;
+		double x = a / b;
 		return x;
 	}
 }
