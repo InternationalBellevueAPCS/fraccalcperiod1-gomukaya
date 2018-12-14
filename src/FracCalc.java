@@ -13,48 +13,35 @@ public class FracCalc {
 		System.out.println("Please enter an operation.");
 		String operation = "";
 		operation = console.nextLine();
-		while (!operation.equals("quit")) {
-			double answer = produceAnswer(operation);
-			String fraction = fraction(answer);
-			System.out.println("The answer is " + fraction+".");
+		while (!operation.equals("quit")) {// fencepost loop that stops when quit is entered
+			String answer = produceAnswer(operation);
+			System.out.println("The answer is " + answer + ".");
 			System.out.println("Please enter another operation.");
 			operation = console.nextLine();
 		}
-		// TODO: Read the input from the user and call produceAnswer with an equation
-		// Checkpoint 1: Create a Scanner, read one line of input, pass that input to
-		// produceAnswer, print the result.
-		// Checkpoint 2: Accept user input multiple times.
+
 	}
 
-	/**
-	 * produceAnswer - This function takes a String 'input' and produces the result.
-	 * 
-	 * @param input - A fraction string that needs to be evaluated. For your
-	 *              program, this will be the user input. Example: input ==> "1/2 +
-	 *              3/4"
-	 * @return the result of the fraction after it has been calculated. Example:
-	 *         return ==> "1_1/4"
-	 */
-	public static double produceAnswer(String input) {
+	public static String produceAnswer(String input) {
 		int firstspace = input.indexOf(" ");
 		String firstOperand = input.substring(0, firstspace);
-		int slash = firstOperand.indexOf("/");
-		int underscore = firstOperand.indexOf("_");
+		int slash1 = firstOperand.indexOf("/");
+		int underscore1 = firstOperand.indexOf("_");
 		String whole = "";
 		String numerator = "";
 		String denominator = "";
-		if (slash != -1 && underscore > 0) {
-			whole = firstOperand.substring(0, underscore);
-			numerator = firstOperand.substring(underscore + 1, slash);
-			denominator = firstOperand.substring(slash + 1, firstOperand.length());
-		} else if (slash == -1) {
+		if (slash1 == -1) { // when there is no fraction
 			whole = firstOperand;
 			numerator = ("0");
-			denominator = ("1");
-		} else if (underscore == -1) {
-			whole = ("0");
-			numerator = firstOperand.substring(underscore + 1, slash);
-			denominator = firstOperand.substring(slash + 1, firstOperand.length());
+			denominator = ("0");
+		} else if (slash1 != -1 && underscore1 == -1) {
+			whole=("0");
+			numerator = firstOperand.substring(0,slash1);
+			denominator = firstOperand.substring(slash1+1,firstOperand.length());
+		}else {
+			whole = firstOperand.substring(0, underscore1);
+			numerator = firstOperand.substring(underscore1 + 1, slash1);
+			denominator = firstOperand.substring(slash1 + 1, firstOperand.length());
 		}
 		int x = Integer.parseInt(whole);
 		int y = Integer.parseInt(numerator);
@@ -64,20 +51,20 @@ public class FracCalc {
 		int secondspace = afterspace.indexOf(" ");
 		String operator = afterspace.substring(0, 1);
 		String secondOperand = afterspace.substring(secondspace + 1);
-		slash = secondOperand.indexOf("/");
-		underscore = secondOperand.indexOf("_");
-		if (slash != -1 && underscore > 0) {
-			whole = secondOperand.substring(0, underscore);
-			numerator = secondOperand.substring(underscore + 1, slash);
-			denominator = secondOperand.substring(slash + 1, secondOperand.length());
-		} else if (slash == -1) {
+		int slash2 = secondOperand.indexOf("/");
+		int underscore2 = secondOperand.indexOf("_");
+		if (slash2 == -1 && underscore2 == -1) {
 			whole = secondOperand;
 			numerator = ("0");
-			denominator = ("1");
-		} else if (underscore == -1) {
-			whole = ("0");
-			numerator = secondOperand.substring(underscore + 1, slash);
-			denominator = secondOperand.substring(slash + 1, secondOperand.length());
+			denominator = ("0");
+		} else if (slash2 != -1 && underscore2 == -1) {
+			whole=("0");
+			numerator = secondOperand.substring(0,slash2);
+			denominator = secondOperand.substring(slash2+1,secondOperand.length());
+		} else {
+			whole = secondOperand.substring(0, underscore2);
+			numerator = secondOperand.substring(underscore2 + 1, slash2);
+			denominator = secondOperand.substring(slash2 + 1, secondOperand.length());
 		}
 		x = Integer.parseInt(whole);
 		y = Integer.parseInt(numerator);
@@ -93,64 +80,21 @@ public class FracCalc {
 		} else if (operator.equals("/")) {
 			answer = div(firstdec, seconddec);
 		}
-		return answer;
-
-		/*
-		 * String afterspace = input.substring(firstspace + 1); int secondspace =
-		 * afterspace.indexOf(" "); String operator = afterspace.substring(0,
-		 * secondspace + 1); String secondOperand = afterspace.substring(secondspace +
-		 * 1); slash = secondOperand.indexOf("/"); underscore =
-		 * secondOperand.indexOf("_"); int wholenum = 0; int numeratornum = 0; int
-		 * denominatornum = 0; String whole = (""); String numerator = (""); String
-		 * denominator = (""); if (slash != -1&&underscore>0) { whole =
-		 * secondOperand.substring(0, underscore); numerator =
-		 * secondOperand.substring(underscore + 1, slash); denominator =
-		 * secondOperand.substring(slash + 1, secondOperand.length()); } else if (slash
-		 * == -1) { whole = secondOperand; numerator = ("0"); denominator = ("1"); }
-		 * else if (underscore == -1) { whole = ("0"); numerator =
-		 * secondOperand.substring(underscore + 1, slash); denominator =
-		 * secondOperand.substring(slash + 1, secondOperand.length()); } wholenum =
-		 * Integer.parseInt(whole); numeratornum = Integer.parseInt(numerator);
-		 * denominatornum = Integer.parseInt(denominator); secondOperand=("whole:" +
-		 * wholenum + " " + "numerator:" + numeratornum + " " + "denominator:" +
-		 * denominatornum ); return secondOperand;
-		 */
-		// TODO: Implement this function to produce the solution to the input
-		// Checkpoint 1: Return the second operand. Example "4/5 * 1_2/4" returns
-		// "1_2/4".
-		// Checkpoint 2: Return the second operand as a string representing each part.
-		// Example "4/5 * 1_2/4" returns "whole:1 numerator:2 denominator:4".
-		// Checkpoint 3: Evaluate the formula and return the result as a fraction.
-		// Example "4/5 * 1_2/4" returns "6/5".
-		// Note: Answer does not need to be reduced, but it must be correct.
-		// Final project: All answers must be reduced.
-		// Example "4/5 * 1_2/4" returns "1_1/5".
-
-	}
-
-	public static String fraction(double x) {
-		String a = "" + x;
-		String spilts[] = a.split("\\."); // split using decimal
-		int b = spilts[1].length(); // find the decimal length
-		int denominator = (int) Math.pow(10, b); // calculate the denominator
-		int numerator = (int) (x * denominator); // calculate the numerator
-		int gcd = getGCD(numerator, denominator); // Find the greatest common divisor between them
-		String fraction = "";
-		if((denominator/gcd)==1) {
-			fraction = "" + numerator;
-			return fraction;
+		String simplified = "" + answer;
+		if (operator.equals("*")) {
+			simplified = fraction(answer);
+		} else if (operator.equals("/")) {
+			simplified = fraction(answer);
 		}
-		else {
-		fraction = "" + numerator / gcd + "/" + denominator / gcd;
-		return fraction;
-	}
+
+		return simplified;
 	}
 
-	public static int getGCD(int a, int b) {
+	public static int GCD(int a, int b) {
 		if (b == 0) {
 			return a;
 		}
-		return getGCD(b, a % b);
+		return GCD(b, a % b);
 	}
 
 	public static double toDecimal(int a, int b, int c) {
@@ -160,23 +104,60 @@ public class FracCalc {
 		return z;
 	}
 
-	public static double add(double a, double b) {
+	public static double add(double a, double b) {// adds the two decimals
 		double x = a + b;
 		return x;
 	}
 
-	public static double sub(double a, double b) {
+	public static double sub(double a, double b) {// subtracts the two decimals
 		double x = a - b;
 		return x;
 	}
 
-	public static double mul(double a, double b) {
+	public static double mul(double a, double b) {// multiplies the two decimals
 		double x = a * b;
 		return x;
 	}
 
-	public static double div(double a, double b) {
+	public static double div(double a, double b) {// divides the two decimals
 		double x = a / b;
 		return x;
+	}
+
+	public static String fraction(double x) {// converts the decimal into a fraction
+		String str = "";
+		if (x == 0) {
+			str = "0";
+		} else if (x != 0) {
+			String a = "" + x;
+			String s[] = a.split("\\.");
+			int b = s[0].length();
+			int denominator = (int) Math.pow(10, b);
+			int numerator = (int) (x * denominator);
+			int gcd = getGCD(numerator, denominator);
+			str = simplify((numerator / gcd), (denominator / gcd));
+		}
+		return str;
+	}
+
+	public static int getGCD(int n1, int n2) {// gets the greatest common denominator
+		if (n2 == 0) {
+			return n1;
+		}
+		return getGCD(n2, n1 % n2);
+	}
+
+	public static String simplify(int num, int den) {// simplifies the fraction
+		int x = num / den;
+		int y = num % den;
+		String s;
+		if (x < 1 && x > 0) {
+			s = "" + num + "/" + den;
+		} else if (x == 0) {
+			s = "0";
+		} else {
+			s = "" + x + "_" + y + "/" + den;
+		}
+		return s;
 	}
 }
